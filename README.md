@@ -17,7 +17,7 @@ Este projeto consiste em um formulário simples para cadastro de eventos, conten
 ## Como Utilizar
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/seuusuario/verificador-senha.git
+   git clone https://github.com/CBJR69/form-validacao-basica.git
    ```
 2. Abra o arquivo `index.html` no navegador.
 
