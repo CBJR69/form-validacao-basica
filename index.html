@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validação Básica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container my-5">
+        <div class="card mx-auto" style="max-width: 400px;">
+            <div class="card-header bg-primary text-white">Cadastro de Evento</div>
+            <div class="card-body">
+                <form id="formValidacao">
+                    <label class="form-label">Nome do Evento</label>
+                    <input type="text" id="nomeEvento" class="form-control" required>
+                    <small class="text-danger d-none" id="erroNome">Mínimo 5 caracteres</small>
+                    <br>
+                    <label class="form-label">Data</label>
+                    <input type="text" id="dataEvento" class="form-control" placeholder="DD/MM/AAAA" required>
+                    <small class="text-danger d-none" id="erroData">Data inválida</small>
+                    <button type="submit" class="btn btn-primary mt-3">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Máscara para Data (DD/MM/AAAA)
+            $('#dataEvento').on('input', function () {
+                let valor = $(this).val().replace(/\D/g, '');
+                if (valor.length > 2) valor = valor.replace(/(\d{2})(\d)/, '$1/$2');
+                if (valor.length > 5) valor = valor.replace(/(\d{2})\/(\d{2})(\d)/, '$1/$2/$3');
+                $(this).val(valor);
+            });
+
+            // Validação do Formulário
+            $('#formValidacao').on('submit', function (e) {
+                e.preventDefault();
+                let nome = $('#nomeEvento').val();
+                let data = $('#dataEvento').val();
+                let dataRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+                
+                // Verifica se o nome tem pelo menos 5 caracteres
+                if (nome.length < 5) {
+                    $('#erroNome').removeClass('d-none');
+                } else {
+                    $('#erroNome').addClass('d-none');
+                }
+
+                // Validação de Data
+                if (!dataRegex.test(data) || !validarData(data)) {
+                    $('#erroData').removeClass('d-none');
+                } else {
+                    $('#erroData').addClass('d-none');
+                }
+
+                // Se tudo estiver correto, exibe sucesso
+                if (nome.length >= 5 && validarData(data)) {
+                    alert('Cadastro realizado com sucesso!');
+                }
+            });
+
+            // Função para validar se a data existe
+            function validarData(data) {
+                let [dia, mes, ano] = data.split('/').map(Number);
+                let dataValida = new Date(ano, mes - 1, dia);
+                return (
+                    dataValida.getDate() === dia &&
+                    dataValida.getMonth() + 1 === mes &&
+                    dataValida.getFullYear() === ano
+                );
+            }
+        });
+    </script>
+</body>
+
+</html>
